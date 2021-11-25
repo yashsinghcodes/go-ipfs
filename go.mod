@@ -56,7 +56,7 @@ require (
 	github.com/ipfs/go-unixfs v0.2.5
 	github.com/ipfs/go-unixfsnode v1.1.3
 	github.com/ipfs/go-verifcid v0.0.1
-	github.com/ipfs/interface-go-ipfs-core v0.5.1
+	github.com/ipfs/interface-go-ipfs-core v0.5.3-0.20211119141042-1187b2462b7e
 	github.com/ipfs/tar-utils v0.0.1
 	github.com/ipld/go-car v0.3.2
 	github.com/ipld/go-codec-dagpb v1.3.0
@@ -94,7 +94,7 @@ require (
 	github.com/multiformats/go-multiaddr v0.4.0
 	github.com/multiformats/go-multiaddr-dns v0.3.1
 	github.com/multiformats/go-multibase v0.0.3
-	github.com/multiformats/go-multicodec v0.3.0
+	github.com/multiformats/go-multicodec v0.3.1-0.20211123212544-3a381346297b
 	github.com/multiformats/go-multihash v0.0.15
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/pkg/errors v0.9.1
