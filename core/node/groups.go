@@ -112,8 +112,18 @@ func LibP2P(bcfg *BuildCfg, cfg *config.Config) fx.Option {
 	}
 
 	enableRelayTransport := cfg.Swarm.Transports.Network.Relay.WithDefault(true) //nolint
-	enableRelayService := cfg.Swarm.RelayService.Enabled.WithDefault(true)
-	enableRelayClient := cfg.Swarm.RelayClient.Enabled.WithDefault(true)
+	enableRelayService := cfg.Swarm.RelayService.Enabled.WithDefault(enableRelayTransport)
+	enableRelayClient := cfg.Swarm.RelayClient.Enabled.WithDefault(enableRelayTransport)
+
+	// Log error when relay subsystem could not be initialized
+	if !enableRelayTransport {
+		if cfg.Swarm.RelayService.Enabled.WithDefault(true) {
+			logger.Error("Failed to enable `Swarm.RelayService.Enabled`, it requires `Swarm.Transports.Network.Relay` to be true.")
+		}
+		if cfg.Swarm.RelayClient.Enabled.WithDefault(true) {
+			logger.Error("Failed to enable `Swarm.RelayClient.Enabled`, it requires `Swarm.Transports.Network.Relay` to be true.")
+		}
+	}
 
 	// Force users to migrate old config.
 	//nolint
