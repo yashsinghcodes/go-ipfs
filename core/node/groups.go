@@ -113,6 +113,7 @@ func LibP2P(bcfg *BuildCfg, cfg *config.Config) fx.Option {
 
 	// If `cfg.Swarm.DisableRelay` is set and `Network.RelayTransport` isn't, use the former.
 	enableRelayTransport := cfg.Swarm.Transports.Network.Relay.WithDefault(!cfg.Swarm.DisableRelay) //nolint
+	enableRelayClient := cfg.Swarm.RelayClient.Enabled.WithDefault(true)
 
 	// Warn about a deprecated option.
 	//nolint
@@ -126,12 +127,7 @@ func LibP2P(bcfg *BuildCfg, cfg *config.Config) fx.Option {
 	}
 	//nolint
 	if cfg.Swarm.EnableAutoRelay {
-		logger.Error("The 'Swarm.EnableAutoRelay' config field is deprecated.")
-		if cfg.Swarm.RelayClient.Enabled == config.Default {
-			logger.Error("Use the 'Swarm.AutoRelay.Enabled' config field instead")
-		} else {
-			logger.Error("'Swarm.EnableAutoRelay' has been overridden by 'Swarm.AutoRelay.Enabled'")
-		}
+		logger.Fatal("The 'Swarm.EnableAutoRelay' (Relay V1) config field was removed, use the 'Swarm.RelayClient.Enabled' (V2) instead.")
 	}
 	//nolint
 	if cfg.Swarm.EnableRelayHop {
@@ -154,7 +150,7 @@ func LibP2P(bcfg *BuildCfg, cfg *config.Config) fx.Option {
 		fx.Invoke(libp2p.SetupDiscovery(cfg.Discovery.MDNS.Enabled, cfg.Discovery.MDNS.Interval)),
 		fx.Provide(libp2p.ForceReachability(cfg.Internal.Libp2pForceReachability)),
 		fx.Provide(libp2p.StaticRelays(cfg.Swarm.RelayClient.StaticRelays)),
-		fx.Provide(libp2p.HolePunching(cfg.Swarm.EnableHolePunching, cfg.Swarm.RelayClient.Enabled.WithDefault(false))),
+		fx.Provide(libp2p.HolePunching(cfg.Swarm.EnableHolePunching, enableRelayClient)),
 
 		fx.Provide(libp2p.Security(!bcfg.DisableEncryptedConnections, cfg.Swarm.Transports)),
 
@@ -164,7 +160,7 @@ func LibP2P(bcfg *BuildCfg, cfg *config.Config) fx.Option {
 
 		maybeProvide(libp2p.BandwidthCounter, !cfg.Swarm.DisableBandwidthMetrics),
 		maybeProvide(libp2p.NatPortMap, !cfg.Swarm.DisableNatPortMap),
-		maybeProvide(libp2p.AutoRelay(len(cfg.Swarm.RelayClient.StaticRelays) == 0), cfg.Swarm.RelayClient.Enabled.WithDefault(false)),
+		maybeProvide(libp2p.AutoRelay(len(cfg.Swarm.RelayClient.StaticRelays) == 0), enableRelayClient),
 		autonat,
 		connmgr,
 		ps,

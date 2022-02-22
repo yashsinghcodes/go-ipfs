@@ -1374,21 +1374,7 @@ Type: `flag`
 
 ### `Swarm.EnableAutoRelay`
 
-Deprecated: Set `Swarm.RelayClient.Enabled` to `true`.
-
-Enables "automatic relay user" mode for this node.
-
-Your node will automatically _use_ public relays from the network if it detects
-that it cannot be reached from the public internet (e.g., it's behind a
-firewall) and get a `/p2p-circuit` address from a public relay.
-
-This is likely the feature you're looking for, but see also:
-- [`Swarm.RelayService.Enabled`](#swarmrelayserviceenabled) if your node should act as a limited relay for other peers
-- Docs: [Libp2p Circuit Relay](https://docs.libp2p.io/concepts/circuit-relay/)
-
-Default: `false`
-
-Type: `bool`
+Removed (V1): Use `Swarm.RelayClient.Enabled` (Relay V2) instead.
 
 ### `Swarm.RelayClient`
 
