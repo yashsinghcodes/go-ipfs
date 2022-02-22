@@ -107,7 +107,6 @@ config file at runtime.
     - [`Swarm.DisableBandwidthMetrics`](#swarmdisablebandwidthmetrics)
     - [`Swarm.DisableNatPortMap`](#swarmdisablenatportmap)
     - [`Swarm.EnableHolePunching`](#swarmenableholepunching)
-    - [`Swarm.EnableAutoRelay`](#swarmenableautorelay)
     - [`Swarm.RelayClient`](#swarmrelayclient)
       - [`Swarm.RelayClient.Enabled`](#swarmrelayclientenabled)
       - [`Swarm.RelayClient.StaticRelays`](#swarmrelayclientstaticrelays)
@@ -122,7 +121,6 @@ config file at runtime.
       - [`Swarm.RelayService.MaxReservationsPerPeer`](#swarmrelayservicemaxreservationsperpeer)
       - [`Swarm.RelayService.MaxReservationsPerIP`](#swarmrelayservicemaxreservationsperip)
       - [`Swarm.RelayService.MaxReservationsPerASN`](#swarmrelayservicemaxreservationsperasn)
-    - [`Swarm.DisableRelay`](#swarmdisablerelay)
     - [`Swarm.EnableAutoNATService`](#swarmenableautonatservice)
     - [`Swarm.ConnMgr`](#swarmconnmgr)
       - [`Swarm.ConnMgr.Type`](#swarmconnmgrtype)
@@ -1374,7 +1372,9 @@ Type: `flag`
 
 ### `Swarm.EnableAutoRelay`
 
-Removed (V1): Use `Swarm.RelayClient.Enabled` (Relay V2) instead.
+**REMOVED**
+
+Use `Swarm.RelayClient.Enabled` (Relay V2) instead.
 
 ### `Swarm.RelayClient`
 
@@ -1520,15 +1520,9 @@ Replaced with [`Swarm.RelayService.Enabled`](#swarmrelayserviceenabled).
 
 ### `Swarm.DisableRelay`
 
-Deprecated: Set `Swarm.Transports.Network.Relay` to `false`.
+**REMOVED**
 
-Disables the p2p-circuit relay transport. This will prevent this node from
-connecting to nodes behind relays, or accepting connections from nodes behind
-relays.
-
-Default: `false`
-
-Type: `bool`
+Set `Swarm.Transports.Network.Relay` to `false` instead.
 
 ### `Swarm.EnableAutoNATService`
 
@@ -1687,8 +1681,9 @@ NATs.
 
 See also:
 - Docs: [Libp2p Circuit Relay](https://docs.libp2p.io/concepts/circuit-relay/)
-- [`Swarm.EnableAutoRelay`](#swarmenableautorelay) for getting a public
-  `/p2p-circuit` address when behind a firewall.
+- [`Swarm.RelayClient.Enabled`](#swarmrelayclientenabled) for getting a public
+-  `/p2p-circuit` address when behind a firewall.
+  - [`Swarm.EnableHolePunching`](#swarmenableholepunching) for direct connection upgrade through relay
 - [`Swarm.RelayService.Enabled`](#swarmrelayserviceenabled) for becoming a
   limited relay for other peers
 

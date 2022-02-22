@@ -112,9 +112,10 @@ func LibP2P(bcfg *BuildCfg, cfg *config.Config) fx.Option {
 	}
 
 	enableRelayTransport := cfg.Swarm.Transports.Network.Relay.WithDefault(true) //nolint
+	enableRelayService := cfg.Swarm.RelayService.Enabled.WithDefault(true)
 	enableRelayClient := cfg.Swarm.RelayClient.Enabled.WithDefault(true)
 
-	// Warn about a deprecated option.
+	// Force users to migrate old config.
 	//nolint
 	if cfg.Swarm.DisableRelay {
 		logger.Fatal("The 'Swarm.DisableRelay' (Relay V1) config field was removed." +
@@ -140,7 +141,7 @@ func LibP2P(bcfg *BuildCfg, cfg *config.Config) fx.Option {
 		fx.Provide(libp2p.AddrsFactory(cfg.Addresses.Announce, cfg.Addresses.AppendAnnounce, cfg.Addresses.NoAnnounce)),
 		fx.Provide(libp2p.SmuxTransport(cfg.Swarm.Transports)),
 		fx.Provide(libp2p.RelayTransport(enableRelayTransport)),
-		fx.Provide(libp2p.RelayService(cfg.Swarm.RelayService.Enabled.WithDefault(true), cfg.Swarm.RelayService)),
+		fx.Provide(libp2p.RelayService(enableRelayService, cfg.Swarm.RelayService)),
 		fx.Provide(libp2p.Transports(cfg.Swarm.Transports)),
 		fx.Invoke(libp2p.StartListening(cfg.Addresses.Swarm)),
 		fx.Invoke(libp2p.SetupDiscovery(cfg.Discovery.MDNS.Enabled, cfg.Discovery.MDNS.Interval)),
