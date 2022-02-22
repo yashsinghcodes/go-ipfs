@@ -111,27 +111,23 @@ func LibP2P(bcfg *BuildCfg, cfg *config.Config) fx.Option {
 		autonat = fx.Provide(libp2p.AutoNATService(cfg.AutoNAT.Throttle))
 	}
 
-	// If `cfg.Swarm.DisableRelay` is set and `Network.RelayTransport` isn't, use the former.
-	enableRelayTransport := cfg.Swarm.Transports.Network.Relay.WithDefault(!cfg.Swarm.DisableRelay) //nolint
+	enableRelayTransport := cfg.Swarm.Transports.Network.Relay.WithDefault(true) //nolint
 	enableRelayClient := cfg.Swarm.RelayClient.Enabled.WithDefault(true)
 
 	// Warn about a deprecated option.
 	//nolint
 	if cfg.Swarm.DisableRelay {
-		logger.Error("The 'Swarm.DisableRelay' config field is deprecated.")
-		if enableRelayTransport {
-			logger.Error("'Swarm.DisableRelay' has been overridden by 'Swarm.Transports.Network.Relay'")
-		} else {
-			logger.Error("Use the 'Swarm.Transports.Network.Relay' config field instead")
-		}
+		logger.Fatal("The 'Swarm.DisableRelay' (Relay V1) config field was removed." +
+			"Use the 'Swarm.Transports.Network.Relay' (V2) instead.")
 	}
 	//nolint
 	if cfg.Swarm.EnableAutoRelay {
-		logger.Fatal("The 'Swarm.EnableAutoRelay' (Relay V1) config field was removed, use the 'Swarm.RelayClient.Enabled' (V2) instead.")
+		logger.Fatal("The 'Swarm.EnableAutoRelay' (Relay V1) config field was removed." +
+			"Use the 'Swarm.RelayClient.Enabled' (V2) instead.")
 	}
 	//nolint
 	if cfg.Swarm.EnableRelayHop {
-		logger.Fatal("The `Swarm.EnableRelayHop` config field is ignored.\n" +
+		logger.Fatal("The `Swarm.EnableRelayHop` config field was removed.\n" +
 			"Use `Swarm.RelayService` to configure the circuit v2 relay.\n" +
 			"If you want to continue running a circuit v1 relay, please use the standalone relay daemon: https://github.com/libp2p/go-libp2p-relay-daemon (with RelayV1.Enabled: true)")
 	}
